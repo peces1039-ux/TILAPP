@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'config/supabase_config.dart';
 import 'screens/login_screen.dart';
-import 'screens/dashboard_screen.dart';
+import 'pages/home_page.dart';
 import 'services/auth_service.dart';
 import 'services/auth_guard.dart';
 
@@ -10,28 +10,28 @@ final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   try {
     debugPrint('Iniciando Supabase...');
     debugPrint('URL: ${SupabaseConfig.supabaseUrl}');
     debugPrint('Inicializando cliente de Supabase...');
-    
+
     await Supabase.initialize(
       url: SupabaseConfig.supabaseUrl,
       anonKey: SupabaseConfig.supabaseAnonKey,
-      realtimeClientOptions: const RealtimeClientOptions(
-        eventsPerSecond: 2,
-      ),
+      realtimeClientOptions: const RealtimeClientOptions(eventsPerSecond: 2),
       debug: true,
     );
-    
+
     debugPrint('Supabase inicializado correctamente');
     debugPrint('Verificando conexión...');
-    
+
     try {
       final client = Supabase.instance.client;
       final currentSession = client.auth.currentSession;
-      debugPrint('Conexión verificada correctamente. Sesión: ${currentSession != null ? 'activa' : 'inactiva'}');
+      debugPrint(
+        'Conexión verificada correctamente. Sesión: ${currentSession != null ? 'activa' : 'inactiva'}',
+      );
     } catch (e) {
       debugPrint('Error verificando conexión: $e');
       rethrow;
@@ -40,7 +40,7 @@ void main() async {
     debugPrint('Error inicializando Supabase: $e');
     rethrow;
   }
-  
+
   runApp(MyApp());
 }
 
@@ -54,10 +54,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       navigatorKey: navigatorKey,
       title: 'Fish Feeding App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        useMaterial3: true,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
       home: StreamBuilder<AuthState>(
         stream: _authService.authStateChanges(),
         builder: (context, snapshot) {
@@ -71,7 +68,7 @@ class MyApp extends StatelessWidget {
             return const LoginScreen();
           }
 
-          return AuthGuard(child: DashboardScreen());
+          return AuthGuard(child: HomePage());
         },
       ),
     );
