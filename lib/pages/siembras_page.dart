@@ -209,56 +209,55 @@ class _SiembrasPageState extends State<SiembrasPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[100],
-      body: _loading
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: _siembras.length,
-              itemBuilder: (context, index) {
-                final siembra = _siembras[index];
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.grey[100],
+        body: _loading
+            ? const Center(child: CircularProgressIndicator())
+            : ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: _siembras.length,
+                itemBuilder: (context, index) {
+                  final siembra = _siembras[index];
 
-                return Card(
-                  elevation: 2,
-                  margin: const EdgeInsets.only(bottom: 16),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.all(16),
-                    title: const Text(
-                      'Siembra',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
+                  return Card(
+                    elevation: 2,
+                    margin: const EdgeInsets.only(bottom: 16),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.all(16),
+                      title: const Text(
+                        'Siembra',
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
-                    ),
-                    subtitle: Text(
-                      '${siembra['especie']}',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: () async {
-                      final resultado = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              SiembraDetalleScreen(siembra: siembra),
+                      subtitle: Text(
+                        '${siembra['especie']}',
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
-                      );
-                      if (resultado == true) {
-                        await _loadData();
-                      }
-                    },
-                  ),
-                );
-              },
-            ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _showAddDialog,
-        backgroundColor: Colors.blue,
-        child: const Icon(Icons.add),
+                      ),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                      onTap: () async {
+                        final resultado = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                SiembraDetalleScreen(siembra: siembra),
+                          ),
+                        );
+                        if (resultado == true) {
+                          await _loadData();
+                        }
+                      },
+                    ),
+                  );
+                },
+              ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _showAddDialog,
+          backgroundColor: Colors.blue,
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }

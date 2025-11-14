@@ -83,105 +83,121 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[100],
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildNotificationSection(),
-              const SizedBox(height: 24),
-              const Text(
-                'Acciones Rápidas',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.grey[100],
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildNotificationSection(),
+                const SizedBox(height: 24),
+                const Text(
+                  'Acciones Rápidas',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              GridView.count(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: 0.9,
-                children: [
-                  _buildActionCard(
-                    'Estanques',
-                    'Gestiona tus estanques y su información',
-                    Icons.water,
-                    () {
-                      // La navegación se maneja desde HomePage
-                    },
-                  ),
-                  _buildActionCard(
-                    'Siembras',
-                    'Registra y monitorea tus siembras',
-                    Icons.add_chart,
-                    () {
-                      // La navegación se maneja desde HomePage
-                    },
-                  ),
-                  _buildActionCard(
-                    'Biometrías',
-                    'Monitorea el crecimiento del cultivo',
-                    Icons.monitor_weight,
-                    () {
-                      // La navegación se maneja desde HomePage
-                    },
-                  ),
-                  _buildActionCard(
-                    'Reportes',
-                    'Visualiza estadísticas y reportes',
-                    Icons.bar_chart,
-                    () {
-                      // TODO: Implementar pantalla de reportes
-                    },
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.amber.shade50,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.amber.shade200),
-                ),
-                child: Row(
+                const SizedBox(height: 16),
+                GridView.count(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 1.2,
                   children: [
-                    Icon(Icons.info_outline, color: Colors.amber.shade700),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Tip del día',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.amber.shade900,
-                            ),
+                    _buildActionCard(
+                      'Ver Estanques',
+                      'Gestiona tus estanques',
+                      Icons.water,
+                      () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Navega a la pestaña de Estanques'),
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Revisa regularmente los parámetros de agua para mantener la salud de tus peces.',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.amber.shade700,
-                            ),
+                        );
+                      },
+                    ),
+                    _buildActionCard(
+                      'Nueva Siembra',
+                      'Registra una nueva siembra',
+                      Icons.add_circle,
+                      () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Navega a la pestaña de Siembras'),
                           ),
-                        ],
-                      ),
+                        );
+                      },
+                    ),
+                    _buildActionCard(
+                      'Biometrías',
+                      'Registra mediciones',
+                      Icons.analytics,
+                      () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Navega a la pestaña de Biometrías'),
+                          ),
+                        );
+                      },
+                    ),
+                    _buildActionCard(
+                      'Reportes',
+                      'Ver estadísticas',
+                      Icons.assessment,
+                      () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Próximamente')),
+                        );
+                      },
                     ),
                   ],
                 ),
-              ),
-            ],
+                const SizedBox(height: 24),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.amber.shade50,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.amber.shade200),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.info_outline, color: Colors.amber.shade700),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Tip del día',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.amber.shade900,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Revisa regularmente los parámetros de agua para mantener la salud de tus peces.',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.amber.shade700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

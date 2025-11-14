@@ -36,16 +36,16 @@ class _LoginScreenState extends State<LoginScreen> {
       debugPrint('Iniciando proceso de login...');
       final email = _emailController.text.trim().toLowerCase();
       debugPrint('Email a utilizar: $email');
-      
+
       final response = await _authService.login(
         email,
         _passwordController.text,
       );
-      
+
       if (!mounted) return;
-      
+
       debugPrint('Verificando respuesta de autenticación...');
-      
+
       if (response.session != null && response.user != null) {
         debugPrint('Login exitoso, navegando al dashboard');
         Navigator.of(context).pushReplacementNamed('/dashboard');
@@ -55,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
           _loading = false;
         });
       }
-      
+
     } on AuthException catch (error) {
       debugPrint('Error de autenticación: ${error.message}');
       if (mounted) {
@@ -106,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
         _emailController.text.trim().toLowerCase(),
         redirectTo: 'http://localhost:3000',
       );
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -131,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget build(BuildContext context) {
-    return Scaffold(
+  return SafeArea(child: Scaffold(
       backgroundColor: Colors.white,
       body: Center(
         child: SingleChildScrollView(
@@ -305,7 +305,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   @override

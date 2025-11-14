@@ -270,7 +270,7 @@ class _SiembraDetalleScreenState extends State<SiembraDetalleScreen> {
       builder: (BuildContext context) {
         TextEditingController causaController =
             TextEditingController(text: (muerte['causa'] as String?) ?? '');
-        
+
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
@@ -443,7 +443,7 @@ class _SiembraDetalleScreenState extends State<SiembraDetalleScreen> {
     final cantidadActual =
         (_siembra['cantidad_inicial'] as int) - totalMuertes;
 
-    return Scaffold(
+  return SafeArea(child: Scaffold(
       appBar: AppBar(
         title: const Text('Detalle de Siembra'),
         actions: [
@@ -790,6 +790,6 @@ class _SiembraDetalleScreenState extends State<SiembraDetalleScreen> {
                 ),
               ),
             ),
-    );
+    ));
   }
 }

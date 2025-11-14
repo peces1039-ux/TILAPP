@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'config/supabase_config.dart';
 import 'screens/login_screen.dart';
 import 'pages/home_page.dart';
@@ -10,6 +11,9 @@ final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(
+    fileName: 'assets/.env',
+  ); // Cargar variables de entorno desde assets
 
   try {
     debugPrint('Iniciando Supabase...');

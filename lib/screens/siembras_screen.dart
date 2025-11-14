@@ -38,13 +38,13 @@ class _SiembrasScreenState extends State<SiembrasScreen> {
   Future<void> _loadData() async {
     try {
       setState(() => _loading = true);
-      
+
       // Cargar estanques
       final estanquesResponse = await _supabase
           .from('estanques')
           .select()
           .order('numero');
-      
+
       // Cargar siembras con información de estanques y muertes
       final siembrasResponse = await _supabase
           .from('siembras')
@@ -162,7 +162,9 @@ class _SiembrasScreenState extends State<SiembrasScreen> {
                     ),
                     TextField(
                       controller: _cantidadController,
-                      decoration: const InputDecoration(labelText: 'Cantidad Inicial'),
+                      decoration: const InputDecoration(
+                        labelText: 'Cantidad Inicial',
+                      ),
                       keyboardType: TextInputType.number,
                     ),
                     ListTile(
@@ -207,58 +209,55 @@ class _SiembrasScreenState extends State<SiembrasScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Gestión de Siembras'),
-      ),
-      body: _loading
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: _siembras.length,
-              itemBuilder: (context, index) {
-                final siembra = _siembras[index];
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Gestión de Siembras')),
+        body: _loading
+            ? const Center(child: CircularProgressIndicator())
+            : ListView.builder(
+                itemCount: _siembras.length,
+                itemBuilder: (context, index) {
+                  final siembra = _siembras[index];
 
-                return Card(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.all(16),
-                    title: const Text(
-                      'Siembra',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
-                      ),
+                  return Card(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
                     ),
-                    subtitle: Text(
-                      '${siembra['especie']}',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.all(16),
+                      title: const Text(
+                        'Siembra',
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
-                    ),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: () async {
-                      final resultado = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              SiembraDetalleScreen(siembra: siembra),
+                      subtitle: Text(
+                        '${siembra['especie']}',
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
-                      );
-                      if (resultado == true) {
-                        await _loadData();
-                      }
-                    },
-                  ),
-                );
-              },
-            ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _showAddDialog,
-        child: const Icon(Icons.add),
+                      ),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                      onTap: () async {
+                        final resultado = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                SiembraDetalleScreen(siembra: siembra),
+                          ),
+                        );
+                        if (resultado == true) {
+                          await _loadData();
+                        }
+                      },
+                    ),
+                  );
+                },
+              ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _showAddDialog,
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }
