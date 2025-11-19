@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'config/supabase_config.dart';
 import 'screens/login_screen.dart';
-import 'pages/home_page.dart';
+import 'screens/register_screen.dart';
+import 'screens/profile_screen.dart';
+import 'screens/home_screen.dart';
 import 'services/auth_service.dart';
 import 'services/auth_guard.dart';
 
@@ -59,6 +62,21 @@ class MyApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       title: 'Fish Feeding App',
       theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('es', 'ES'), // Español
+        Locale('en', 'US'), // English
+      ],
+      routes: {
+        '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
+        '/profile': (context) => AuthGuard(child: const ProfileScreen()),
+        '/home': (context) => AuthGuard(child: HomeScreen()),
+      },
       home: StreamBuilder<AuthState>(
         stream: _authService.authStateChanges(),
         builder: (context, snapshot) {
@@ -72,7 +90,7 @@ class MyApp extends StatelessWidget {
             return const LoginScreen();
           }
 
-          return AuthGuard(child: HomePage());
+          return AuthGuard(child: HomeScreen());
         },
       ),
     );

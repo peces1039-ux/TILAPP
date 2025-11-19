@@ -1,6 +1,13 @@
+// Siembras Screen
+// Related: T046, FR-011 to FR-015
+// Displays list of user's siembras with card display and navigation to detail
+
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:intl/intl.dart';
+import '../services/siembras_service.dart';
+import '../models/siembra.dart';
+import '../widgets/siembra_form_sheet.dart';
+import '../widgets/custom_app_bar.dart';
 import 'siembra_detalle_screen.dart';
 
 class SiembrasScreen extends StatefulWidget {
@@ -11,251 +18,169 @@ class SiembrasScreen extends StatefulWidget {
 }
 
 class _SiembrasScreenState extends State<SiembrasScreen> {
-  final _supabase = Supabase.instance.client;
-  List<Map<String, dynamic>> _siembras = [];
-  List<Map<String, dynamic>> _estanques = [];
-  bool _loading = true;
-
-  // Controladores para el formulario
-  final _especieController = TextEditingController();
-  final _cantidadController = TextEditingController();
-  DateTime _fechaSiembra = DateTime.now();
-  String? _selectedEstanqueId;
+  final _siembrasService = SiembrasService();
+  List<Siembra> _siembras = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _loadData();
+    _loadSiembras();
   }
 
-  @override
-  void dispose() {
-    _especieController.dispose();
-    _cantidadController.dispose();
-    super.dispose();
-  }
+  Future<void> _loadSiembras() async {
+    setState(() => _isLoading = true);
 
-  Future<void> _loadData() async {
     try {
-      setState(() => _loading = true);
+      final siembras = await _siembrasService.getAll();
 
-      // Cargar estanques
-      final estanquesResponse = await _supabase
-          .from('estanques')
-          .select()
-          .order('numero');
-
-      // Cargar siembras con información de estanques y muertes
-      final siembrasResponse = await _supabase
-          .from('siembras')
-          .select('''
-            *,
-            estanques (
-              numero
-            ),
-            muertes_siembra (
-              cantidad
-            )
-          ''')
-          .order('fecha_siembra', ascending: false);
+      if (!mounted) return;
 
       setState(() {
-        _estanques = List<Map<String, dynamic>>.from(estanquesResponse);
-        _siembras = List<Map<String, dynamic>>.from(siembrasResponse);
-        _loading = false;
+        _siembras = siembras;
+        _isLoading = false;
       });
-    } catch (error) {
+    } catch (e) {
+      if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error al cargar los datos: $error'),
+          content: Text('Error al cargar siembras: $e'),
           backgroundColor: Colors.red,
         ),
       );
-      setState(() => _loading = false);
+
+      setState(() => _isLoading = false);
     }
-  }
-
-  Future<void> _addSiembra() async {
-    if (_selectedEstanqueId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Por favor seleccione un estanque'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
-    try {
-      final cantidad = int.tryParse(_cantidadController.text);
-      if (cantidad == null || cantidad <= 0) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('La cantidad debe ser un número positivo'),
-            backgroundColor: Colors.red,
-          ),
-        );
-        return;
-      }
-
-      await _supabase.from('siembras').insert({
-        'especie': _especieController.text,
-        'cantidad_inicial': cantidad,
-        'fecha_siembra': _fechaSiembra.toIso8601String(),
-        'id_estanque': _selectedEstanqueId,
-      });
-
-      // Limpiar el formulario
-      _especieController.clear();
-      _cantidadController.clear();
-      _selectedEstanqueId = null;
-      _fechaSiembra = DateTime.now();
-
-      // Recargar datos
-      await _loadData();
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Siembra agregada exitosamente')),
-        );
-      }
-    } catch (error) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error al agregar la siembra: $error'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }
-  }
-
-  void _showAddDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              title: const Text('Agregar Nueva Siembra'),
-              content: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    DropdownButtonFormField<String>(
-                      value: _selectedEstanqueId,
-                      decoration: const InputDecoration(labelText: 'Estanque'),
-                      items: _estanques.map((estanque) {
-                        return DropdownMenuItem(
-                          value: estanque['id'].toString(),
-                          child: Text('Estanque ${estanque['numero']}'),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() => _selectedEstanqueId = value);
-                      },
-                    ),
-                    TextField(
-                      controller: _especieController,
-                      decoration: const InputDecoration(labelText: 'Especie'),
-                    ),
-                    TextField(
-                      controller: _cantidadController,
-                      decoration: const InputDecoration(
-                        labelText: 'Cantidad Inicial',
-                      ),
-                      keyboardType: TextInputType.number,
-                    ),
-                    ListTile(
-                      title: const Text('Fecha de Siembra'),
-                      subtitle: Text(
-                        DateFormat('dd/MM/yyyy').format(_fechaSiembra),
-                      ),
-                      onTap: () async {
-                        final fecha = await showDatePicker(
-                          context: context,
-                          initialDate: _fechaSiembra,
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime.now(),
-                        );
-                        if (fecha != null) {
-                          setState(() => _fechaSiembra = fecha);
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancelar'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    _addSiembra();
-                  },
-                  child: const Text('Guardar'),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: const Text('Gestión de Siembras')),
-        body: _loading
-            ? const Center(child: CircularProgressIndicator())
-            : ListView.builder(
-                itemCount: _siembras.length,
-                itemBuilder: (context, index) {
-                  final siembra = _siembras[index];
-
-                  return Card(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.all(16),
-                      title: const Text(
-                        'Siembra',
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
-                      ),
-                      subtitle: Text(
-                        '${siembra['especie']}',
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+        appBar: const CustomAppBar(title: 'Siembras'),
+        backgroundColor: Colors.grey[100],
+        body: RefreshIndicator(
+          onRefresh: _loadSiembras,
+          child: _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : _siembras.isEmpty
+              ? const Center(
+                  child: Text(
+                    'No hay siembras registradas',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                )
+              : ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: _siembras.length,
+                  itemBuilder: (context, index) {
+                    final siembra = _siembras[index];
+                    return Card(
+                      elevation: 4,
+                      margin: const EdgeInsets.only(bottom: 16),
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
                         ),
-                      ),
-                      trailing: const Icon(Icons.arrow_forward_ios),
-                      onTap: () async {
-                        final resultado = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                SiembraDetalleScreen(siembra: siembra),
+                        leading: Icon(
+                          Icons.agriculture,
+                          size: 40,
+                          color: siembra.isActive ? Colors.green : Colors.grey,
+                        ),
+                        title: Text(
+                          siembra.especie,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
                           ),
-                        );
-                        if (resultado == true) {
-                          await _loadData();
-                        }
-                      },
-                    ),
-                  );
-                },
-              ),
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 4),
+                            Text(
+                              'Fecha: ${DateFormat('dd/MM/yyyy').format(siembra.fechaSiembra)}',
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Cantidad: ${siembra.cantidadActual} / ${siembra.cantidadInicial}',
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                            const SizedBox(height: 4),
+                            Wrap(
+                              spacing: 12,
+                              runSpacing: 4,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      siembra.isActive
+                                          ? Icons.check_circle
+                                          : Icons.cancel,
+                                      size: 16,
+                                      color: siembra.isActive
+                                          ? Colors.green
+                                          : Colors.red,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      siembra.isActive ? 'Activa' : 'Inactiva',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: siembra.isActive
+                                            ? Colors.green
+                                            : Colors.red,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                  'Supervivencia: ${siembra.survivalRate.toStringAsFixed(1)}%',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey[700],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        trailing: const Icon(Icons.arrow_forward_ios),
+                        onTap: () async {
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  SiembraDetalleScreen(siembraId: siembra.id),
+                            ),
+                          );
+                          // Reload if siembra was deleted
+                          if (result == true && mounted) {
+                            await _loadSiembras();
+                          }
+                        },
+                      ),
+                    );
+                  },
+                ),
+        ),
         floatingActionButton: FloatingActionButton(
-          onPressed: _showAddDialog,
+          onPressed: () async {
+            final result = await SiembraFormSheet.show(
+              context,
+              onSaved: _loadSiembras,
+            );
+            if (result == true && mounted) {
+              await _loadSiembras();
+            }
+          },
+          backgroundColor: Colors.teal,
           child: const Icon(Icons.add),
         ),
       ),

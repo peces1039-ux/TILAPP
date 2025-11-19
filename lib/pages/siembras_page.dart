@@ -241,8 +241,9 @@ class _SiembrasPageState extends State<SiembrasPage> {
                         final resultado = await Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                SiembraDetalleScreen(siembra: siembra),
+                            builder: (context) => SiembraDetalleScreen(
+                              siembraId: siembra['id'] as String,
+                            ),
                           ),
                         );
                         if (resultado == true) {

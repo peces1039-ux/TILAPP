@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:intl/intl.dart';
+import '../services/estanques_service.dart';
+import '../models/estanque.dart';
+import '../widgets/estanque_form_sheet.dart';
+import '../widgets/custom_app_bar.dart';
+import 'estanque_detalle_screen.dart';
 
 class EstanquesPage extends StatefulWidget {
   const EstanquesPage({super.key});
@@ -9,9 +14,9 @@ class EstanquesPage extends StatefulWidget {
 }
 
 class _EstanquesPageState extends State<EstanquesPage> {
-  final _supabase = Supabase.instance.client;
+  final _estanquesService = EstanquesService();
   bool _isLoading = true;
-  List<Map<String, dynamic>> _estanques = [];
+  List<Estanque> _estanques = [];
 
   @override
   void initState() {
@@ -23,15 +28,12 @@ class _EstanquesPageState extends State<EstanquesPage> {
     try {
       setState(() => _isLoading = true);
 
-      final response = await _supabase
-          .from('estanques')
-          .select()
-          .order('numero');
+      final estanques = await _estanquesService.getAll();
+
+      if (!mounted) return;
 
       setState(() {
-        _estanques = (response as List<dynamic>)
-            .map((item) => item as Map<String, dynamic>)
-            .toList();
+        _estanques = estanques;
         _isLoading = false;
       });
     } catch (error) {
@@ -47,104 +49,13 @@ class _EstanquesPageState extends State<EstanquesPage> {
     }
   }
 
-  void _showEstanqueDialog([Map<String, dynamic>? estanque]) {
-    final bool isEditing = estanque != null;
-    final numeroController = TextEditingController(
-      text: estanque?['numero'] ?? '',
-    );
-    final capacidadController = TextEditingController(
-      text: estanque?['capacidad']?.toString() ?? '',
-    );
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(isEditing ? 'Editar Estanque' : 'Nuevo Estanque'),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: numeroController,
-                decoration: const InputDecoration(
-                  labelText: 'Número de Estanque',
-                  hintText: 'Ej: E001',
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: capacidadController,
-                decoration: const InputDecoration(
-                  labelText: 'Capacidad (m³)',
-                  hintText: 'Ej: 1000',
-                ),
-                keyboardType: TextInputType.number,
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancelar'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              try {
-                if (isEditing) {
-                  await _supabase
-                      .from('estanques')
-                      .update({
-                        'numero': numeroController.text,
-                        'capacidad':
-                            double.tryParse(capacidadController.text) ?? 0,
-                        'updated_at': DateTime.now().toIso8601String(),
-                      })
-                      .eq('id', estanque['id']);
-                } else {
-                  await _supabase.from('estanques').insert({
-                    'numero': numeroController.text,
-                    'capacidad': double.tryParse(capacidadController.text) ?? 0,
-                    'created_at': DateTime.now().toIso8601String(),
-                    'updated_at': DateTime.now().toIso8601String(),
-                  });
-                }
-                if (!mounted) return;
-                Navigator.of(context).pop();
-                _loadEstanques();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      isEditing
-                          ? 'Estanque actualizado correctamente'
-                          : 'Estanque creado correctamente',
-                    ),
-                    backgroundColor: Colors.green,
-                  ),
-                );
-              } catch (error) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Error: $error'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              }
-            },
-            child: Text(isEditing ? 'Actualizar' : 'Crear'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _deleteEstanque(Map<String, dynamic> estanque) async {
+  Future<void> _deleteEstanque(Estanque estanque) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Confirmar eliminación'),
         content: Text(
-          '¿Está seguro de eliminar el estanque ${estanque['numero']}?',
+          '¿Está seguro de eliminar el estanque ${estanque.numero}?',
         ),
         actions: [
           TextButton(
@@ -162,10 +73,10 @@ class _EstanquesPageState extends State<EstanquesPage> {
 
     if (confirmed ?? false) {
       try {
-        debugPrint('Intentando eliminar estanque con ID: ${estanque['id']}');
-        debugPrint('Datos del estanque: $estanque');
+        debugPrint('Intentando eliminar estanque con ID: ${estanque.id}');
+        debugPrint('Datos del estanque: ${estanque.toJson()}');
 
-        await _supabase.from('estanques').delete().eq('id', estanque['id']);
+        await _estanquesService.delete(estanque.id.toString());
 
         if (!mounted) return;
         await _loadEstanques();
@@ -192,6 +103,7 @@ class _EstanquesPageState extends State<EstanquesPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: const CustomAppBar(title: 'Estanques'),
         backgroundColor: Colors.grey[100],
         body: RefreshIndicator(
           onRefresh: _loadEstanques,
@@ -213,23 +125,55 @@ class _EstanquesPageState extends State<EstanquesPage> {
                       elevation: 4,
                       margin: const EdgeInsets.only(bottom: 16),
                       child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        leading: const Icon(
+                          Icons.water,
+                          size: 40,
+                          color: Colors.blue,
+                        ),
                         title: Text(
-                          'Estanque ${estanque['numero']}',
+                          'Estanque ${estanque.numero}',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
                           ),
                         ),
-                        subtitle: Text(
-                          'Capacidad: ${estanque['capacidad']} m³',
-                          style: const TextStyle(fontSize: 16),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 4),
+                            Text(
+                              'Capacidad: ${estanque.capacidad} m³',
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Creado: ${DateFormat('dd/MM/yyyy').format(estanque.createdAt)}',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
                         ),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
                               icon: const Icon(Icons.edit),
-                              onPressed: () => _showEstanqueDialog(estanque),
+                              onPressed: () async {
+                                final result = await EstanqueFormSheet.show(
+                                  context,
+                                  estanque: estanque,
+                                  onSaved: _loadEstanques,
+                                );
+                                if (result == true && mounted) {
+                                  await _loadEstanques();
+                                }
+                              },
                               color: Colors.blue,
                             ),
                             IconButton(
@@ -239,13 +183,35 @@ class _EstanquesPageState extends State<EstanquesPage> {
                             ),
                           ],
                         ),
+                        onTap: () async {
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EstanqueDetalleScreen(
+                                estanqueId: estanque.id.toString(),
+                              ),
+                            ),
+                          );
+                          // Reload if estanque was deleted
+                          if (result == true && mounted) {
+                            await _loadEstanques();
+                          }
+                        },
                       ),
                     );
                   },
                 ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => _showEstanqueDialog(),
+          onPressed: () async {
+            final result = await EstanqueFormSheet.show(
+              context,
+              onSaved: _loadEstanques,
+            );
+            if (result == true && mounted) {
+              await _loadEstanques();
+            }
+          },
           backgroundColor: Colors.teal,
           child: const Icon(Icons.add),
         ),
