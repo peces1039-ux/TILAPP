@@ -16,12 +16,24 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(title),
       bottom: bottom,
       actions: [
-        IconButton(
-          icon: const Icon(Icons.account_circle),
-          tooltip: 'Mi Perfil',
-          onPressed: () {
-            Navigator.pushNamed(context, '/profile');
-          },
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, '/profile');
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.person,
+                size: 32,
+                color: Colors.grey[700],
+              ),
+            ),
+          ),
         ),
       ],
     );

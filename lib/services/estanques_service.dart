@@ -128,17 +128,23 @@ class EstanquesService {
       }
 
       // Check numero uniqueness if changed (FR-017)
-      final existing = await getById(estanque.id.toString());
-      if (existing != null && existing.numero != estanque.numero) {
-        final numeroExists = await _checkNumeroExists(estanque.numero);
-        if (numeroExists) {
-          throw Exception(
-            'Ya existe un estanque con el número ${estanque.numero}',
-          );
+      if (estanque.id != null) {
+        final existing = await getById(estanque.id.toString());
+        if (existing != null && existing.numero != estanque.numero) {
+          final numeroExists = await _checkNumeroExists(estanque.numero);
+          if (numeroExists) {
+            throw Exception(
+              'Ya existe un estanque con el número ${estanque.numero}',
+            );
+          }
         }
       }
 
       debugPrint('Updating estanque: ${estanque.id}');
+
+      if (estanque.id == null) {
+        throw Exception('No se puede actualizar un estanque sin ID');
+      }
 
       final data = estanque.toJson();
       data['updated_at'] = DateTime.now().toIso8601String();
@@ -146,7 +152,7 @@ class EstanquesService {
       await _supabase
           .from('estanques')
           .update(data)
-          .eq('id', estanque.id)
+          .eq('id', estanque.id!)
           .eq('user_id', user.id); // Ensure user owns this record
 
       debugPrint('Estanque updated successfully');

@@ -209,6 +209,7 @@ class _SiembraDetalleScreenState extends State<SiembraDetalleScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F7FA),
       appBar: CustomAppBar(
         title: _siembra != null
             ? 'Siembra de ${_siembra!.especie}'
@@ -303,6 +304,7 @@ class _SiembraDetalleScreenState extends State<SiembraDetalleScreen>
             setState(() {});
           }
         },
+        backgroundColor: const Color(0xFF1976D2),
         child: const Icon(Icons.add),
       );
     }
@@ -321,6 +323,7 @@ class _SiembraDetalleScreenState extends State<SiembraDetalleScreen>
             setState(() {});
           }
         },
+        backgroundColor: const Color(0xFF1976D2),
         child: const Icon(Icons.add),
       );
     }

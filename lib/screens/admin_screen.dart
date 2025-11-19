@@ -175,6 +175,7 @@ class _AdminScreenState extends State<AdminScreen> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        backgroundColor: const Color(0xFFF5F7FA),
         appBar: CustomAppBar(
           title: 'Administración',
           bottom: TabBar(

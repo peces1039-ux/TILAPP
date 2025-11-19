@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final items = [
       const BottomNavigationBarItem(
         icon: Icon(Icons.dashboard),
-        label: 'Dashboard',
+        label: 'Inicio',
       ),
       const BottomNavigationBarItem(
         icon: Icon(Icons.water),

@@ -163,6 +163,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F7FA),
       appBar: const CustomAppBar(title: 'Detalle de Usuario'),
       body: SafeArea(
         child: _isLoading

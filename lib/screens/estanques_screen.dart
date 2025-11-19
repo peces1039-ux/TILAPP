@@ -104,7 +104,7 @@ class _EstanquesPageState extends State<EstanquesPage> {
     return SafeArea(
       child: Scaffold(
         appBar: const CustomAppBar(title: 'Estanques'),
-        backgroundColor: Colors.grey[100],
+        backgroundColor: const Color(0xFFF5F7FA),
         body: RefreshIndicator(
           onRefresh: _loadEstanques,
           child: _isLoading
@@ -212,7 +212,7 @@ class _EstanquesPageState extends State<EstanquesPage> {
               await _loadEstanques();
             }
           },
-          backgroundColor: Colors.teal,
+          backgroundColor: const Color(0xFF1976D2),
           child: const Icon(Icons.add),
         ),
       ),

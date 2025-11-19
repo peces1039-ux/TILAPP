@@ -59,7 +59,7 @@ class _SiembrasScreenState extends State<SiembrasScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: const CustomAppBar(title: 'Siembras'),
-        backgroundColor: Colors.grey[100],
+        backgroundColor: const Color(0xFFF5F7FA),
         body: RefreshIndicator(
           onRefresh: _loadSiembras,
           child: _isLoading
@@ -180,7 +180,7 @@ class _SiembrasScreenState extends State<SiembrasScreen> {
               await _loadSiembras();
             }
           },
-          backgroundColor: Colors.teal,
+          backgroundColor: const Color(0xFF1976D2),
           child: const Icon(Icons.add),
         ),
       ),
