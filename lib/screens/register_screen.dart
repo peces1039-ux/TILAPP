@@ -51,7 +51,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Registro exitoso. Bienvenido!'),
-          backgroundColor: Colors.green,
+          backgroundColor: const Color(0xFF00BCD4),
         ),
       );
 

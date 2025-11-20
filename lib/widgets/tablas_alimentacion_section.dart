@@ -83,18 +83,18 @@ class _TablasAlimentacionSectionState extends State<TablasAlimentacionSection> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.orange.withOpacity(0.1),
+                color: const Color(0xFF003D7A).withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.orange),
+                border: Border.all(color: const Color(0xFF003D7A)),
               ),
               child: const Row(
                 children: [
-                  Icon(Icons.warning, color: Colors.orange, size: 20),
+                  Icon(Icons.warning, color: const Color(0xFF003D7A), size: 20),
                   SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       'Nota: Verifica que esta tabla no esté en uso por siembras activas.',
-                      style: TextStyle(fontSize: 12, color: Colors.orange),
+                      style: TextStyle(fontSize: 12, color: const Color(0xFF003D7A)),
                     ),
                   ),
                 ],
@@ -126,7 +126,7 @@ class _TablasAlimentacionSectionState extends State<TablasAlimentacionSection> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Tabla eliminada exitosamente'),
-          backgroundColor: Colors.green,
+          backgroundColor: Color(0xFF00BCD4),
         ),
       );
 
@@ -216,7 +216,7 @@ class _TablasAlimentacionSectionState extends State<TablasAlimentacionSection> {
                           margin: const EdgeInsets.only(bottom: 12.0),
                           child: ListTile(
                             leading: CircleAvatar(
-                              backgroundColor: Colors.green,
+                              backgroundColor: const Color(0xFF008B8B),
                               child: Text(
                                 '${tabla.edadSemanas}s',
                                 style: const TextStyle(
@@ -266,7 +266,7 @@ class _TablasAlimentacionSectionState extends State<TablasAlimentacionSection> {
                                 IconButton(
                                   icon: const Icon(
                                     Icons.edit,
-                                    color: Colors.blue,
+                                    color: Color(0xFF5B7FFF),
                                   ),
                                   tooltip: 'Editar',
                                   onPressed: () => _openFormSheet(tabla: tabla),
@@ -289,7 +289,8 @@ class _TablasAlimentacionSectionState extends State<TablasAlimentacionSection> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => _openFormSheet(),
         tooltip: 'Nueva tabla',
-        child: const Icon(Icons.add),
+        backgroundColor: const Color(0xFF003D7A),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

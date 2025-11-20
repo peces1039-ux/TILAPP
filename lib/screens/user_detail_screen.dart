@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../models/user_profile.dart';
 import '../services/admin_service.dart';
 import '../widgets/custom_app_bar.dart';
+import '../widgets/fish_loading.dart';
 
 class UserDetailScreen extends StatefulWidget {
   final UserProfile user;
@@ -81,7 +82,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
               'Nota: Verifica manualmente que el usuario no tenga estanques asociados antes de eliminar.',
               style: TextStyle(
                 fontSize: 12,
-                color: Colors.orange,
+                color: const Color(0xFF003D7A),
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -114,7 +115,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Usuario eliminado exitosamente'),
-          backgroundColor: Colors.green,
+          backgroundColor: const Color(0xFF00BCD4),
         ),
       );
 
@@ -167,7 +168,9 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
       appBar: const CustomAppBar(title: 'Detalle de Usuario'),
       body: SafeArea(
         child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? FishLoading(
+                message: 'Cargando usuario...',
+              )
             : SingleChildScrollView(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -180,7 +183,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                           CircleAvatar(
                             radius: 50,
                             backgroundColor: widget.user.isAdmin
-                                ? Colors.orange
+                                ? const Color(0xFF003D7A)
                                 : Colors.blue,
                             child: Text(
                               widget.user.nombre.isNotEmpty
@@ -211,7 +214,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                               ),
                             ),
                             backgroundColor: widget.user.isAdmin
-                                ? Colors.orange
+                                ? const Color(0xFF003D7A)
                                 : Colors.blue,
                           ),
                           if (widget.user.isDeleted)
@@ -298,18 +301,18 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.orange.withOpacity(0.1),
+                          color: const Color(0xFF003D7A).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.orange),
+                          border: Border.all(color: const Color(0xFF003D7A)),
                         ),
                         child: const Row(
                           children: [
-                            Icon(Icons.info_outline, color: Colors.orange),
+                            Icon(Icons.info_outline, color: Color(0xFF003D7A)),
                             SizedBox(width: 12),
                             Expanded(
                               child: Text(
                                 'Los usuarios administradores no pueden ser eliminados por razones de seguridad.',
-                                style: TextStyle(color: Colors.orange),
+                                style: TextStyle(color: Color(0xFF003D7A)),
                               ),
                             ),
                           ],

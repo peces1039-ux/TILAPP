@@ -11,6 +11,7 @@ import '../models/estanque.dart';
 import '../models/siembra.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/estanque_form_sheet.dart';
+import '../widgets/fish_loading.dart';
 
 class EstanqueDetalleScreen extends StatefulWidget {
   final String estanqueId;
@@ -130,7 +131,7 @@ class _EstanqueDetalleScreenState extends State<EstanqueDetalleScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Estanque eliminado exitosamente'),
-          backgroundColor: Colors.green,
+          backgroundColor: const Color(0xFF00BCD4),
         ),
       );
 
@@ -157,7 +158,9 @@ class _EstanqueDetalleScreenState extends State<EstanqueDetalleScreen> {
             : 'Detalles del Estanque',
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? FishLoading(
+              message: 'Cargando estanque...',
+            )
           : _estanque == null
           ? const Center(child: Text('Estanque no encontrado'))
           : RefreshIndicator(
@@ -254,7 +257,7 @@ class _EstanqueDetalleScreenState extends State<EstanqueDetalleScreen> {
                         (siembra) => Card(
                           margin: const EdgeInsets.only(bottom: 8.0),
                           child: ListTile(
-                            leading: const Icon(Icons.agriculture),
+                            leading: const Icon(Icons.agriculture, color: Color(0xFF00BCD4)),
                             title: Text(siembra.especie),
                             subtitle: Text(
                               'Fecha: ${DateFormat('dd/MM/yyyy').format(siembra.fechaSiembra)}\n'
@@ -299,8 +302,11 @@ class _EstanqueDetalleScreenState extends State<EstanqueDetalleScreen> {
                                 await _loadData();
                               }
                             },
-                            icon: const Icon(Icons.edit),
+                            icon: const Icon(Icons.edit, color: Color(0xFF5B7FFF)),
                             label: const Text('Editar'),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: const Color(0xFF003D7A),
+                            ),
                           ),
                         ),
                         const SizedBox(width: 16),

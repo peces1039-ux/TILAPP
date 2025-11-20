@@ -4,6 +4,7 @@ import '../services/siembras_service.dart';
 import '../services/profiles_service.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/summary_card.dart';
+import '../widgets/fish_loading.dart';
 import '../models/user_profile.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -62,7 +63,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       backgroundColor: const Color(0xFFF5F7FA),
       body: SafeArea(
         child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? const FishLoading(
+                message: 'Cargando dashboard...',
+              )
             : RefreshIndicator(
                 onRefresh: _loadDashboardData,
                 child: SingleChildScrollView(
@@ -85,25 +88,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   Text(
                                     'Bienvenido, ${_currentProfile?.nombre ?? "Usuario"}',
                                     style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.w700,
                                       color: Colors.black87,
+                                      letterSpacing: 0.5,
+                                      fontFamily: 'Coolvetica',
                                     ),
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
                                     _currentProfile?.role.value.toUpperCase() ?? 'Usuario',
                                     style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.grey[600],
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: const Color(0xFF1976D2),
+                                      letterSpacing: 0.3,
                                     ),
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
                                     'Aquí tienes un resumen de tu operación',
                                     style: TextStyle(
-                                      fontSize: 13,
-                                      color: Colors.grey[500],
+                                      fontSize: 15,
+                                      color: Colors.grey[600],
+                                      fontWeight: FontWeight.w500,
                                     ),
                                   ),
                                 ],
@@ -168,9 +176,40 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   title: 'Siembras\nActivas',
                                   value: _siembrasActivas.toString(),
                                   icon: Icons.agriculture,
-                                  iconColor: const Color(0xFF4CAF50),
+                                  iconColor: const Color(0xFF00BCD4),
                                 ),
                               ],
+                            ),
+                            const SizedBox(height: 24),
+                            // Sección Notificaciones
+                            const Text(
+                              'Notificaciones',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black87,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[100],
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: Colors.grey[300]!,
+                                  width: 1,
+                                ),
+                              ),
+                              child: const Text(
+                                'No hay notificaciones en este momento',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                             ),
                             const SizedBox(height: 24),
                           ],

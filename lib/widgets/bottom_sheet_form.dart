@@ -116,6 +116,11 @@ class BottomSheetForm extends StatelessWidget {
                       onPressed: isLoading
                           ? null
                           : (onCancel ?? () => Navigator.pop(context)),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: const Color(0xFF1976D2),
+                        side: const BorderSide(color: Color(0xFFB3D9F2)),
+                        backgroundColor: const Color(0xFFE3F2FD),
+                      ),
                       child: Text(cancelButtonText),
                     ),
                   ),
@@ -124,7 +129,7 @@ class BottomSheetForm extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: isLoading ? null : onSave,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.teal,
+                        backgroundColor: const Color(0xFF1976D2),
                         foregroundColor: Colors.white,
                       ),
                       child: isLoading

@@ -105,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
             content: Text(
               'Se ha enviado un correo para restablecer tu contraseña',
             ),
-            backgroundColor: Colors.green,
+            backgroundColor: const Color(0xFF00BCD4),
           ),
         );
       }

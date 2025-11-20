@@ -9,6 +9,7 @@ import '../services/admin_service.dart';
 import '../models/user_profile.dart';
 import 'user_detail_screen.dart';
 import '../widgets/tablas_alimentacion_section.dart';
+import '../widgets/fish_loading.dart';
 
 class AdminScreen extends StatefulWidget {
   const AdminScreen({super.key});
@@ -90,7 +91,7 @@ class _AdminScreenState extends State<AdminScreen> {
               'Nota: Verifica que el usuario no tenga estanques asociados antes de eliminar.',
               style: TextStyle(
                 fontSize: 12,
-                color: Colors.orange,
+                color: Color(0xFF003D7A),
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -180,6 +181,9 @@ class _AdminScreenState extends State<AdminScreen> {
           title: 'Administración',
           bottom: TabBar(
             onTap: (index) => setState(() => _currentTabIndex = index),
+            indicatorColor: const Color(0xFF1976D2),
+            labelColor: const Color(0xFF1976D2),
+            unselectedLabelColor: Colors.grey,
             tabs: const [
               Tab(icon: Icon(Icons.people), text: 'Usuarios'),
               Tab(icon: Icon(Icons.table_chart), text: 'Tablas Alimentación'),
@@ -203,7 +207,9 @@ class _AdminScreenState extends State<AdminScreen> {
 
   Widget _buildUsersSection() {
     return _isLoading
-        ? const Center(child: CircularProgressIndicator())
+        ? FishLoading(
+            message: 'Cargando usuarios...',
+          )
         : RefreshIndicator(
             onRefresh: _loadUsers,
             child: _users.isEmpty

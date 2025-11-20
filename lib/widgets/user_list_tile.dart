@@ -30,7 +30,7 @@ class UserListTile extends StatelessWidget {
             children: [
               // Avatar
               CircleAvatar(
-                backgroundColor: user.isAdmin ? Colors.orange : Colors.blue,
+                backgroundColor: user.isAdmin ? const Color(0xFF003D7A) : Colors.blue,
                 child: Text(
                   user.nombre.isNotEmpty ? user.nombre[0].toUpperCase() : 'U',
                   style: const TextStyle(
@@ -48,8 +48,10 @@ class UserListTile extends StatelessWidget {
                     Text(
                       user.nombre,
                       style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                        color: Colors.black87,
+                        letterSpacing: 0.3,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -57,7 +59,11 @@ class UserListTile extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       user.email,
-                      style: TextStyle(fontSize: 13, color: Colors.grey[700]),
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey[700],
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -74,7 +80,8 @@ class UserListTile extends StatelessWidget {
                           child: Text(
                             'Creado: ${_formatDate(user.createdAt)}',
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
                               color: Colors.grey[600],
                             ),
                             maxLines: 1,
@@ -121,7 +128,7 @@ class UserListTile extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    backgroundColor: user.isAdmin ? Colors.orange : Colors.blue,
+                    backgroundColor: user.isAdmin ? const Color(0xFF003D7A) : Colors.blue,
                     padding: const EdgeInsets.symmetric(horizontal: 4),
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),

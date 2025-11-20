@@ -256,8 +256,8 @@ class _SiembrasPageState extends State<SiembrasPage> {
               ),
         floatingActionButton: FloatingActionButton(
           onPressed: _showAddDialog,
-          backgroundColor: Colors.blue,
-          child: const Icon(Icons.add),
+          backgroundColor: const Color(0xFF003D7A),
+          child: const Icon(Icons.add, color: Colors.white),
         ),
       ),
     );

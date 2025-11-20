@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:intl/intl.dart';
 import '../widgets/custom_app_bar.dart';
+import '../widgets/fish_loading.dart';
 
 class MuertesSiembraScreen extends StatefulWidget {
   final String idSiembra;
@@ -234,11 +235,11 @@ class _MuertesSiembraScreenState extends State<MuertesSiembraScreen> {
                 Navigator.pop(context);
                 _mostrarDialogoEditar(muerte);
               },
-              icon: const Icon(Icons.edit),
+              icon: const Icon(Icons.edit, color: Color(0xFF5B7FFF)),
               label: const Text('Editar'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue[100],
-                foregroundColor: Colors.blue[900],
+                backgroundColor: const Color(0xFF5B7FFF).withOpacity(0.1),
+                foregroundColor: const Color(0xFF003D7A),
               ),
             ),
           ],
@@ -429,7 +430,9 @@ class _MuertesSiembraScreenState extends State<MuertesSiembraScreen> {
         title: 'Gestión de Muertes - ${widget.especieSiembra}',
       ),
       body: _loading
-          ? const Center(child: CircularProgressIndicator())
+          ? const FishLoading(
+              message: 'Cargando muertes...',
+            )
           : _muertes.isEmpty
               ? Center(
                   child: Column(
@@ -438,7 +441,7 @@ class _MuertesSiembraScreenState extends State<MuertesSiembraScreen> {
                       Icon(
                         Icons.check_circle,
                         size: 64,
-                        color: Colors.green[300],
+                        color: const Color(0xFFB2DFDB),
                       ),
                       const SizedBox(height: 16),
                       const Text(
@@ -497,8 +500,8 @@ class _MuertesSiembraScreenState extends State<MuertesSiembraScreen> {
                 ),
       floatingActionButton: FloatingActionButton(
         onPressed: _agregarMuerte,
-        backgroundColor: const Color(0xFF1976D2),
-        child: const Icon(Icons.add),
+        backgroundColor: const Color(0xFF003D7A),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:intl/intl.dart';
 import '../widgets/custom_app_bar.dart';
+import '../widgets/fish_loading.dart';
 
 class BiometriaSiembraScreen extends StatefulWidget {
   final int idSiembra;
@@ -176,7 +177,9 @@ class _BiometriaSiembraScreenState extends State<BiometriaSiembraScreen> {
         title: 'Biometría',
       ),
       body: _loading
-          ? const Center(child: CircularProgressIndicator())
+          ? const FishLoading(
+              message: 'Cargando biometrías...',
+            )
           : _registrosBiometria.isEmpty
               ? const Center(
                   child: Text('No hay registros de biometría'),
@@ -204,8 +207,8 @@ class _BiometriaSiembraScreenState extends State<BiometriaSiembraScreen> {
                 ),
       floatingActionButton: FloatingActionButton(
         onPressed: _agregarBiometria,
-        backgroundColor: const Color(0xFF1976D2),
-        child: const Icon(Icons.add),
+        backgroundColor: const Color(0xFF003D7A),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

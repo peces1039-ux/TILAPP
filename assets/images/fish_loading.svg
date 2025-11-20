@@ -1,0 +1,23 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Pez principal -->
+  <g id="fish">
+    <!-- Cola -->
+    <path d="M 30 100 Q 10 80, 5 60 Q 20 90, 30 100 Q 20 110, 5 140 Q 10 120, 30 100" fill="#1976D2" stroke="#000" stroke-width="3" stroke-linejoin="round"/>
+    
+    <!-- Cuerpo -->
+    <ellipse cx="90" cy="100" rx="60" ry="45" fill="#1976D2" stroke="#000" stroke-width="3"/>
+    
+    <!-- Aleta dorsal -->
+    <path d="M 70 55 Q 85 35, 100 50 Q 85 65, 70 60" fill="#1976D2" stroke="#000" stroke-width="3"/>
+    
+    <!-- Cabeza -->
+    <circle cx="140" cy="100" r="35" fill="#1976D2" stroke="#000" stroke-width="3"/>
+    
+    <!-- Ojo -->
+    <circle cx="150" cy="95" r="8" fill="#000"/>
+    <circle cx="151" cy="94" r="3" fill="#FFF"/>
+    
+    <!-- Boca -->
+    <path d="M 160 105 Q 170 110, 165 115" stroke="#000" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </g>
+</svg>
