@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/profiles_service.dart';
 import '../models/user_profile.dart';
+import '../widgets/fish_loading.dart';
 import 'dashboard_screen.dart';
 import 'estanques_screen.dart';
 import 'siembras_screen.dart';
@@ -56,10 +57,10 @@ class _HomeScreenState extends State<HomeScreen> {
     final items = [
       const BottomNavigationBarItem(
         icon: Icon(Icons.dashboard),
-        label: 'Dashboard',
+        label: 'Inicio',
       ),
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.water),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.waves),
         label: 'Estanques',
       ),
       const BottomNavigationBarItem(
@@ -95,7 +96,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+      return const Scaffold(
+        body: FishLoading(
+          message: 'Inicializando...',
+        ),
+      );
     }
 
     final screens = _buildScreens();
@@ -110,7 +115,8 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         items: navItems,
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: const Color(0xFFE3F2FD),
+        selectedItemColor: const Color(0xFF1976D2),
         unselectedItemColor: Colors.grey,
       ),
     );

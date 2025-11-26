@@ -140,7 +140,7 @@ class _SiembraFormSheetState extends State<SiembraFormSheet> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Seleccione un estanque'),
-          backgroundColor: Colors.orange,
+          backgroundColor: const Color(0xFF003D7A),
         ),
       );
       return;
@@ -187,7 +187,7 @@ class _SiembraFormSheetState extends State<SiembraFormSheet> {
                 ? 'Siembra actualizada exitosamente'
                 : 'Siembra creada exitosamente',
           ),
-          backgroundColor: Colors.green,
+          backgroundColor: const Color(0xFF00BCD4),
         ),
       );
 
@@ -222,7 +222,13 @@ class _SiembraFormSheetState extends State<SiembraFormSheet> {
           decoration: const InputDecoration(
             labelText: 'Especie *',
             hintText: 'Ej: Tilapia',
-            prefixIcon: Icon(Icons.pets),
+            prefixIcon: Padding(
+              padding: EdgeInsets.all(12.0),
+              child: Text(
+                '🐟',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
             border: OutlineInputBorder(),
           ),
           textCapitalization: TextCapitalization.words,
@@ -243,13 +249,13 @@ class _SiembraFormSheetState extends State<SiembraFormSheet> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.orange[50],
+              color: const Color(0xFF003D7A).withOpacity(0.1),
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.orange[200]!),
+              border: Border.all(color: const Color(0xFF003D7A).withOpacity(0.3)),
             ),
             child: const Text(
               'No hay estanques disponibles. Cree un estanque primero.',
-              style: TextStyle(color: Colors.orange),
+              style: TextStyle(color: const Color(0xFF003D7A)),
             ),
           )
         else

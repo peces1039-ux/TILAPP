@@ -8,6 +8,7 @@ import '../services/siembras_service.dart';
 import '../models/siembra.dart';
 import '../widgets/siembra_form_sheet.dart';
 import '../widgets/custom_app_bar.dart';
+import '../widgets/fish_loading.dart';
 import 'siembra_detalle_screen.dart';
 
 class SiembrasScreen extends StatefulWidget {
@@ -59,11 +60,13 @@ class _SiembrasScreenState extends State<SiembrasScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: const CustomAppBar(title: 'Siembras'),
-        backgroundColor: Colors.grey[100],
+        backgroundColor: const Color(0xFFF5F7FA),
         body: RefreshIndicator(
           onRefresh: _loadSiembras,
           child: _isLoading
-              ? const Center(child: CircularProgressIndicator())
+              ? const FishLoading(
+                  message: 'Cargando siembras...',
+                )
               : _siembras.isEmpty
               ? const Center(
                   child: Text(
@@ -87,13 +90,15 @@ class _SiembrasScreenState extends State<SiembrasScreen> {
                         leading: Icon(
                           Icons.agriculture,
                           size: 40,
-                          color: siembra.isActive ? Colors.green : Colors.grey,
+                          color: siembra.isActive ? const Color(0xFF00BCD4) : Colors.grey,
                         ),
                         title: Text(
                           siembra.especie,
                           style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 20,
+                            color: Colors.black87,
+                            letterSpacing: 0.3,
                           ),
                         ),
                         subtitle: Column(
@@ -102,12 +107,20 @@ class _SiembrasScreenState extends State<SiembrasScreen> {
                             const SizedBox(height: 4),
                             Text(
                               'Fecha: ${DateFormat('dd/MM/yyyy').format(siembra.fechaSiembra)}',
-                              style: const TextStyle(fontSize: 14),
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black87,
+                              ),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               'Cantidad: ${siembra.cantidadActual} / ${siembra.cantidadInicial}',
-                              style: const TextStyle(fontSize: 14),
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black87,
+                              ),
                             ),
                             const SizedBox(height: 4),
                             Wrap(
@@ -124,7 +137,7 @@ class _SiembrasScreenState extends State<SiembrasScreen> {
                                           : Icons.cancel,
                                       size: 16,
                                       color: siembra.isActive
-                                          ? Colors.green
+                                          ? const Color(0xFF00BCD4)
                                           : Colors.red,
                                     ),
                                     const SizedBox(width: 4),
@@ -133,9 +146,9 @@ class _SiembrasScreenState extends State<SiembrasScreen> {
                                       style: TextStyle(
                                         fontSize: 14,
                                         color: siembra.isActive
-                                            ? Colors.green
+                                            ? const Color(0xFF00BCD4)
                                             : Colors.red,
-                                        fontWeight: FontWeight.bold,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   ],
@@ -180,8 +193,8 @@ class _SiembrasScreenState extends State<SiembrasScreen> {
               await _loadSiembras();
             }
           },
-          backgroundColor: Colors.teal,
-          child: const Icon(Icons.add),
+          backgroundColor: const Color(0xFF003D7A),
+          child: const Icon(Icons.add, color: Colors.white),
         ),
       ),
     );

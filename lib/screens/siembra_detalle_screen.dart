@@ -17,6 +17,7 @@ import '../widgets/biometrias_tab.dart';
 import '../widgets/muertes_tab.dart';
 import '../widgets/biometria_form_sheet.dart';
 import '../widgets/muerte_form_sheet.dart';
+import '../widgets/fish_loading.dart';
 
 class SiembraDetalleScreen extends StatefulWidget {
   final String siembraId;
@@ -140,7 +141,7 @@ class _SiembraDetalleScreenState extends State<SiembraDetalleScreen>
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Siembra eliminada exitosamente'),
-          backgroundColor: Colors.green,
+          backgroundColor: Color(0xFF00BCD4),
         ),
       );
 
@@ -172,7 +173,7 @@ class _SiembraDetalleScreenState extends State<SiembraDetalleScreen>
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
+            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF003D7A)),
             child: const Text('Marcar como cosechada'),
           ),
         ],
@@ -189,7 +190,7 @@ class _SiembraDetalleScreenState extends State<SiembraDetalleScreen>
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Siembra marcada como cosechada'),
-          backgroundColor: Colors.green,
+          backgroundColor: Color(0xFF00BCD4),
         ),
       );
 
@@ -209,6 +210,7 @@ class _SiembraDetalleScreenState extends State<SiembraDetalleScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F7FA),
       appBar: CustomAppBar(
         title: _siembra != null
             ? 'Siembra de ${_siembra!.especie}'
@@ -237,7 +239,9 @@ class _SiembraDetalleScreenState extends State<SiembraDetalleScreen>
             : null,
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? FishLoading(
+              message: 'Cargando siembra...',
+            )
           : _siembra == null
           ? const Center(child: Text('Siembra no encontrada'))
           : TabBarView(
@@ -303,7 +307,8 @@ class _SiembraDetalleScreenState extends State<SiembraDetalleScreen>
             setState(() {});
           }
         },
-        child: const Icon(Icons.add),
+        backgroundColor: const Color(0xFF003D7A),
+        child: const Icon(Icons.add, color: Colors.white),
       );
     }
 
@@ -321,7 +326,8 @@ class _SiembraDetalleScreenState extends State<SiembraDetalleScreen>
             setState(() {});
           }
         },
-        child: const Icon(Icons.add),
+        backgroundColor: const Color(0xFF003D7A),
+        child: const Icon(Icons.add, color: Colors.white),
       );
     }
 

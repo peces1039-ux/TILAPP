@@ -103,7 +103,7 @@ class _TablaAlimentacionFormSheetState
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Debe seleccionar una referencia de alimento'),
-          backgroundColor: Colors.orange,
+          backgroundColor: const Color(0xFF003D7A),
         ),
       );
       return;
@@ -157,7 +157,7 @@ class _TablaAlimentacionFormSheetState
                 ? 'Tabla actualizada exitosamente'
                 : 'Tabla creada exitosamente',
           ),
-          backgroundColor: Colors.green,
+          backgroundColor: const Color(0xFF00BCD4),
         ),
       );
     } catch (e) {

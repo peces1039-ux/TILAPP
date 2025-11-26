@@ -4,6 +4,7 @@ import '../services/estanques_service.dart';
 import '../models/estanque.dart';
 import '../widgets/estanque_form_sheet.dart';
 import '../widgets/custom_app_bar.dart';
+import '../widgets/fish_loading.dart';
 import 'estanque_detalle_screen.dart';
 
 class EstanquesPage extends StatefulWidget {
@@ -104,11 +105,13 @@ class _EstanquesPageState extends State<EstanquesPage> {
     return SafeArea(
       child: Scaffold(
         appBar: const CustomAppBar(title: 'Estanques'),
-        backgroundColor: Colors.grey[100],
+        backgroundColor: const Color(0xFFF5F7FA),
         body: RefreshIndicator(
           onRefresh: _loadEstanques,
           child: _isLoading
-              ? const Center(child: CircularProgressIndicator())
+              ? const FishLoading(
+                  message: 'Cargando estanques...',
+                )
               : _estanques.isEmpty
               ? const Center(
                   child: Text(
@@ -137,8 +140,10 @@ class _EstanquesPageState extends State<EstanquesPage> {
                         title: Text(
                           'Estanque ${estanque.numero}',
                           style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 20,
+                            color: Colors.black87,
+                            letterSpacing: 0.3,
                           ),
                         ),
                         subtitle: Column(
@@ -147,7 +152,11 @@ class _EstanquesPageState extends State<EstanquesPage> {
                             const SizedBox(height: 4),
                             Text(
                               'Capacidad: ${estanque.capacidad} m³',
-                              style: const TextStyle(fontSize: 16),
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black87,
+                              ),
                             ),
                             const SizedBox(height: 4),
                             Text(
@@ -155,6 +164,7 @@ class _EstanquesPageState extends State<EstanquesPage> {
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey[600],
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ],
@@ -163,7 +173,7 @@ class _EstanquesPageState extends State<EstanquesPage> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
-                              icon: const Icon(Icons.edit),
+                              icon: const Icon(Icons.edit, color: Color(0xFF5B7FFF)),
                               onPressed: () async {
                                 final result = await EstanqueFormSheet.show(
                                   context,
@@ -212,8 +222,8 @@ class _EstanquesPageState extends State<EstanquesPage> {
               await _loadEstanques();
             }
           },
-          backgroundColor: Colors.teal,
-          child: const Icon(Icons.add),
+          backgroundColor: const Color(0xFF003D7A),
+          child: const Icon(Icons.add, color: Colors.white),
         ),
       ),
     );

@@ -231,7 +231,7 @@ class _ProgramacionAlimentacionTabState
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: Colors.green[900],
+                            color: const Color(0xFF008B8B),
                           ),
                         ),
                       ],
@@ -252,7 +252,7 @@ class _ProgramacionAlimentacionTabState
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: Colors.orange[900],
+                            color: const Color(0xFF003D7A),
                           ),
                         ),
                       ],
@@ -301,7 +301,7 @@ class _ProgramacionAlimentacionTabState
                   return Card(
                     margin: const EdgeInsets.only(bottom: 12),
                     color: isCompletada
-                        ? Colors.green[50]
+                        ? const Color(0xFFE0F7F6)
                         : (isPastDue ? Colors.red[50] : null),
                     child: CheckboxListTile(
                       value: isCompletada,
@@ -313,7 +313,7 @@ class _ProgramacionAlimentacionTabState
                                 ? Icons.check_circle
                                 : (isPastDue ? Icons.warning : Icons.schedule),
                             color: isCompletada
-                                ? Colors.green[700]
+                                ? const Color(0xFF00BCD4)
                                 : (isPastDue
                                       ? Colors.red[700]
                                       : Colors.blue[700]),
@@ -369,7 +369,7 @@ class _ProgramacionAlimentacionTabState
                               child: Text(
                                 '✓ Completada a las ${racion.horaCompletadaFormatted}',
                                 style: TextStyle(
-                                  color: Colors.green[700],
+                                  color: const Color(0xFF00BCD4),
                                   fontSize: 12,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -390,7 +390,7 @@ class _ProgramacionAlimentacionTabState
                         ],
                       ),
                       secondary: isCompletada
-                          ? Icon(Icons.check_circle, color: Colors.green[700])
+                          ? Icon(Icons.check_circle, color: const Color(0xFF00BCD4))
                           : null,
                     ),
                   );

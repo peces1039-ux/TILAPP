@@ -3,7 +3,7 @@
 // Represents a fish pond with multi-tenancy support
 
 class Estanque {
-  final int id; // INTEGER primary key
+  final int? id; // INTEGER primary key - nullable for new records
   final String userId; // FK to auth.users
   final String numero; // Must be unique within user_id scope (FR-017)
   final double capacidad; // Capacity in cubic meters
@@ -11,7 +11,7 @@ class Estanque {
   final DateTime updatedAt;
 
   Estanque({
-    required this.id,
+    this.id,
     required this.userId,
     required this.numero,
     required this.capacidad,
@@ -22,7 +22,7 @@ class Estanque {
   // Create from Supabase JSON
   factory Estanque.fromJson(Map<String, dynamic> json) {
     return Estanque(
-      id: json['id'] as int,
+      id: json['id'] as int?,
       userId: json['user_id'] as String,
       numero: json['numero'] as String,
       capacidad: (json['capacidad'] as num).toDouble(),
@@ -34,7 +34,7 @@ class Estanque {
   // Convert to Supabase JSON
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      if (id != null) 'id': id,
       'user_id': userId,
       'numero': numero,
       'capacidad': capacidad,

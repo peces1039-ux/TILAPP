@@ -46,7 +46,7 @@ class InformacionGeneralTab extends StatelessWidget {
                       Icon(
                         Icons.agriculture,
                         size: 48,
-                        color: Colors.green[700],
+                        color: const Color(0xFF00BCD4),
                       ),
                       const SizedBox(width: 16),
                       Expanded(
@@ -78,9 +78,9 @@ class InformacionGeneralTab extends StatelessWidget {
                               style: Theme.of(context).textTheme.titleMedium
                                   ?.copyWith(
                                     color: siembra.cosechada
-                                        ? Colors.orange
+                                        ? const Color(0xFF003D7A)
                                         : (siembra.isActive
-                                              ? Colors.green
+                                              ? const Color(0xFF00BCD4)
                                               : Colors.red),
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -129,10 +129,10 @@ class InformacionGeneralTab extends StatelessWidget {
                       width: double.infinity,
                       child: ElevatedButton.icon(
                         onPressed: onMarcarCosechada,
-                        icon: const Icon(Icons.check_circle, size: 18),
+                        icon: const Icon(Icons.check_circle, size: 18, color: Colors.white),
                         label: const Text('Marcar como cosechada'),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
+                          backgroundColor: const Color(0xFF003D7A),
                           foregroundColor: Colors.white,
                         ),
                       ),
@@ -142,10 +142,14 @@ class InformacionGeneralTab extends StatelessWidget {
                     Row(
                       children: [
                         Expanded(
-                          child: OutlinedButton.icon(
+                          child: ElevatedButton.icon(
                             onPressed: onEdit,
-                            icon: const Icon(Icons.edit, size: 18),
+                            icon: const Icon(Icons.edit, size: 18, color: Color(0xFF5B7FFF)),
                             label: const Text('Editar'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF5B7FFF),
+                              foregroundColor: const Color(0xFF003D7A),
+                            ),
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -168,16 +172,16 @@ class InformacionGeneralTab extends StatelessWidget {
                       width: double.infinity,
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.orange[50],
+                        color: const Color(0xFF003D7A).withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.orange[200]!),
+                        border: Border.all(color: const Color(0xFF003D7A).withOpacity(0.3)),
                       ),
                       child: Row(
                         children: [
                           Icon(
                             Icons.info_outline,
                             size: 20,
-                            color: Colors.orange[700],
+                            color: const Color(0xFF003D7A),
                           ),
                           const SizedBox(width: 8),
                           Expanded(
@@ -185,7 +189,7 @@ class InformacionGeneralTab extends StatelessWidget {
                               'Esta siembra ha sido cosechada y no puede modificarse',
                               style: TextStyle(
                                 fontSize: 13,
-                                color: Colors.orange[900],
+                                color: const Color(0xFF003D7A),
                               ),
                             ),
                           ),
@@ -269,14 +273,14 @@ class InformacionGeneralTab extends StatelessWidget {
                       'Biomasa Total',
                       ultimaBiometria!.biomasaTotalFormatted,
                       Icons.scale,
-                      Colors.green[700]!,
+                      const Color(0xFF00BCD4),
                     ),
                     const SizedBox(height: 8),
                     _buildBiometriaInfo(
                       'Alimento Diario',
                       ultimaBiometria!.cantidadAlimentoFormatted,
                       Icons.restaurant,
-                      Colors.orange[700]!,
+                      const Color(0xFF003D7A),
                     ),
                     if (ultimaBiometria!.fca != null) ...[
                       const SizedBox(height: 8),
@@ -285,7 +289,7 @@ class InformacionGeneralTab extends StatelessWidget {
                         ultimaBiometria!.fcaFormatted,
                         Icons.trending_up,
                         ultimaBiometria!.fca! < 2.0
-                            ? Colors.green[700]!
+                            ? const Color(0xFF00BCD4)
                             : Colors.red[700]!,
                       ),
                     ],

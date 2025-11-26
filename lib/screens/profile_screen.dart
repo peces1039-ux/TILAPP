@@ -73,14 +73,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Perfil actualizado exitosamente'),
-          backgroundColor: Colors.green,
-        ),
-      );
-
-      setState(() => _isEditing = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Perfil actualizado exitosamente'),
+            backgroundColor: const Color(0xFF00BCD4),
+          ),
+        );      setState(() => _isEditing = false);
       _loadProfile();
     } catch (e) {
       if (!mounted) return;
@@ -337,11 +335,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mi Perfil'),
+        title: const Text(
+          'Mi Perfil',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.5,
+          ),
+        ),
         actions: [
           if (!_isEditing && !_isLoading)
             IconButton(
-              icon: const Icon(Icons.edit),
+              icon: const Icon(Icons.edit, color: Color(0xFF5B7FFF)),
               onPressed: () {
                 setState(() => _isEditing = true);
               },
@@ -398,7 +403,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             style: const TextStyle(color: Colors.white),
                           ),
                           backgroundColor: _currentProfile!.isAdmin
-                              ? Colors.orange
+                              ? const Color(0xFF003D7A)
                               : Colors.blue,
                         ),
                       ),
@@ -449,8 +454,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       // Change password button
                       OutlinedButton.icon(
                         onPressed: _showChangePasswordDialog,
-                        icon: const Icon(Icons.lock),
-                        label: const Text('Cambiar Contraseña'),
+                        icon: const Icon(Icons.lock, color: Color(0xFF003D7A)),
+                        label: const Text(
+                          'Cambiar Contraseña',
+                          style: TextStyle(color: Color(0xFF003D7A)),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: Color(0xFF003D7A)),
+                        ),
                       ),
                       const SizedBox(height: 16),
 
@@ -461,8 +472,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           if (!mounted) return;
                           Navigator.pushReplacementNamed(context, '/login');
                         },
-                        icon: const Icon(Icons.logout),
-                        label: const Text('Cerrar Sesión'),
+                        icon: const Icon(Icons.logout, color: Color(0xFF003D7A)),
+                        label: const Text(
+                          'Cerrar Sesión',
+                          style: TextStyle(color: Color(0xFF003D7A)),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: Color(0xFF003D7A)),
+                        ),
                       ),
                       const SizedBox(height: 32),
 

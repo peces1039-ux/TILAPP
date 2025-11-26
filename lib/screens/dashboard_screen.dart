@@ -4,6 +4,7 @@ import '../services/siembras_service.dart';
 import '../services/profiles_service.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/summary_card.dart';
+import '../widgets/fish_loading.dart';
 import '../models/user_profile.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -59,101 +60,226 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Dashboard'),
+      backgroundColor: const Color(0xFFF5F7FA),
       body: SafeArea(
         child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? const FishLoading(
+                message: 'Cargando dashboard...',
+              )
             : RefreshIndicator(
                 onRefresh: _loadDashboardData,
                 child: SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Welcome section
-                      Text(
-                        'Bienvenido, ${_currentProfile?.nombre ?? "Usuario"}',
-                        style: Theme.of(context).textTheme.headlineSmall
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Aquí tienes un resumen de tu operación',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-
-                      // Summary cards
-                      Text(
-                        'Resumen',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      GridView.count(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 16,
-                        mainAxisSpacing: 16,
-                        childAspectRatio: 1.3,
-                        children: [
-                          SummaryCard(
-                            title: 'Total de Estanques',
-                            value: _totalEstanques.toString(),
-                            icon: Icons.water,
-                            color: Colors.blue,
-                          ),
-                          SummaryCard(
-                            title: 'Siembras Activas',
-                            value: _siembrasActivas.toString(),
-                            icon: Icons.agriculture,
-                            color: Colors.green,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 24),
-
-                      // Information card
-                      Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
+                      // Header con saludo y perfil
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        color: Colors.white,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Icon(
-                                    Icons.info_outline,
-                                    color: Colors.blue[700],
-                                  ),
-                                  const SizedBox(width: 8),
                                   Text(
-                                    'Acceso Rápido',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium
-                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                    'Bienvenido, ${_currentProfile?.nombre ?? "Usuario"}',
+                                    style: const TextStyle(
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black87,
+                                      letterSpacing: 0.5,
+                                      fontFamily: 'Coolvetica',
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    _currentProfile?.role.value.toUpperCase() ?? 'Usuario',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: const Color(0xFF1976D2),
+                                      letterSpacing: 0.3,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    'Aquí tienes un resumen de tu operación',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.grey[600],
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 12),
-                              Text(
-                                'Usa la barra de navegación inferior para acceder a Estanques y Siembras.',
-                                style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            Container(
+                              width: 48,
+                              height: 48,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: const Color(0xFFE8E8E8),
                               ),
-                            ],
-                          ),
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.pushNamed(context, '/profile');
+                                  },
+                                  borderRadius: BorderRadius.circular(24),
+                                  child: const Icon(
+                                    Icons.person,
+                                    color: Color(0xFF666666),
+                                    size: 24,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Sección Resumen
+                            const Text(
+                              'Resumen',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            GridView.count(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 12,
+                              mainAxisSpacing: 12,
+                              childAspectRatio: 1.5,
+                              children: [
+                                _buildSummaryCard(
+                                  title: 'Total de\nEstanques',
+                                  value: _totalEstanques.toString(),
+                                  icon: Icons.water_drop,
+                                  iconColor: const Color(0xFF1976D2),
+                                ),
+                                _buildSummaryCard(
+                                  title: 'Siembras\nActivas',
+                                  value: _siembrasActivas.toString(),
+                                  icon: Icons.agriculture,
+                                  iconColor: const Color(0xFF00BCD4),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 24),
+                            // Sección Notificaciones
+                            const Text(
+                              'Notificaciones',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black87,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[100],
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: Colors.grey[300]!,
+                                  width: 1,
+                                ),
+                              ),
+                              child: const Text(
+                                'No hay notificaciones en este momento',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                          ],
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
+      ),
+    );
+  }
+
+  Widget _buildSummaryCard({
+    required String title,
+    required String value,
+    required IconData icon,
+    required Color iconColor,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.06),
+            blurRadius: 12,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: iconColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(icon, color: iconColor, size: 20),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  value,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                    height: 1.3,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
