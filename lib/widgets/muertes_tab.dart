@@ -152,7 +152,7 @@ class _MuertesTabState extends State<MuertesTab> {
                       muerte.observaciones!.isNotEmpty) ...[
                     const SizedBox(height: 2),
                     Text(
-                      muerte.observaciones!,
+                      'Causa: ${muerte.observaciones!}',
                       style: TextStyle(fontSize: 13, color: Colors.grey[600]),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
